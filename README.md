@@ -25,6 +25,28 @@ npm start
 
 Open the backoffice at <http://localhost:3000>.
 
+## Run with Docker
+
+```bash
+cp .env.example .env   # then edit it
+
+# Option A — docker compose (recommended)
+docker compose up -d --build
+
+# Option B — plain docker
+docker build -t keeperlive .
+docker run -d --name keeperlive \
+  --env-file .env \
+  -p 3000:3000 \
+  -v keeperlive-data:/app/data \
+  keeperlive
+```
+
+The SQLite database is stored in `/app/data` inside the container, mounted to the
+named volume `keeperlive-data`, so your URLs and recipients **survive container
+restarts and rebuilds**. If you change `PORT` in `.env`, compose maps that port
+automatically.
+
 ## Configuring Gmail as the sender
 
 Gmail blocks plain password logins, so create an **App Password**:

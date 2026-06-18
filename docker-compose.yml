@@ -1,0 +1,17 @@
+services:
+  keeperlive:
+    build: .
+    image: keeperlive
+    container_name: keeperlive
+    ports:
+      # The app reads PORT from .env, so host and container ports are kept in sync.
+      - "${PORT:-3000}:${PORT:-3000}"
+    env_file:
+      - .env
+    volumes:
+      # Persist the SQLite database (URLs, recipients, statuses) across restarts.
+      - keeperlive-data:/app/data
+    restart: unless-stopped
+
+volumes:
+  keeperlive-data:
